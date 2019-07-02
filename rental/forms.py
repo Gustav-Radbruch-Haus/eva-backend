@@ -1,5 +1,6 @@
 from django.forms import ModelForm, ValidationError
 from datetime import timedelta
+import holidays
 from . import models
 
 
@@ -20,6 +21,13 @@ class RentalrequestForm(ModelForm):
         end = cleaned_data.get("end")
         facility = cleaned_data.get("facility")
         rentalsForTheFacility = models.Rental.objects.filter(facility=facility)
+        deHolidays = us_holidays = holidays.CountryHoliday('DE', prov='HH')
+
+
+        if facility == models.Rental.BAR or facility == models.Rental.TEA_ROOM:
+            if begin.date() in deHolidays or end.date() in deHolidays:
+                raise ValidationError(
+                    "The cannot be a rental during hoolidays!")
 
         # Valid options for Bar-Rental
         if facility == models.Rental.BAR:

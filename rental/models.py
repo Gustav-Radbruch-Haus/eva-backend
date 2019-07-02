@@ -1,5 +1,4 @@
 from django.db import models
-
 # Create your models here.
 
 
@@ -60,4 +59,4 @@ class Rental(models.Model):
     comment = models.TextField(blank=True)
 
     def __str__(self):
-        return '%s:%s %s >> %s' % (self.get_facility_display(), self.firstname, self.surname, self.begin)
+        return '%s:%s %s >> %s: %s to %s' % (self.get_facility_display(), self.firstname, self.surname, self.begin.date(), self.begin.time(), self.end.time())
