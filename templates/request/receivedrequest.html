@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% load static%}
+{% load widget_tweaks %}
+
+{% block breadcrumb %}
+{% endblock %}
+{% block main_content %}
+<div class="row">
+    <div class="col-lg-12">
+                    <div class="middle-box text-center animated fadeInRightBig">
+                            <h3 class="font-bold">We received your request!</h3>
+                            <div class="error-desc">
+                                Thank you, {{ req.firstname }} {{ req.surname }}!<br>
+                                We received your request for the: <b>{{ req.get_facility_display }}</b> <br>
+                                from: {{req.begin}} to: {{req.end}}<br>
+                                We will contact you soon if your request can be fulfilled!<br><br>
+                                Cheers!
+                                <br><a href="{% url 'makeRequest' %}" class="btn btn-primary m-t">Make another request</a>
+                            </div>
+                    </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block body_script %}
+{% endblock %}

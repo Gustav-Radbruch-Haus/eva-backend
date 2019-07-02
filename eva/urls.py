@@ -18,7 +18,8 @@ from django.urls import path
 from django.conf.urls import url, include
 from rental.views import index
 
-urlpatterns = [
-    url(r'^', index),
+urlpatterns = [    
+    path('rentals/', include('rental.urls')),
     path('admin/', admin.site.urls),
+    path('accounts/', include('django.contrib.auth.urls')), # new
 ]
