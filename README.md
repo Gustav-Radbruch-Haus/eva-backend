@@ -13,6 +13,6 @@ To make it easier for tenants to make a request for renting stuff from the SHC, 
 
 ## Possible future projects
 * Inventorymanagement
-** SHC
-** Bar
+  * SHC
+  * Bar
 * Eventmanagement
