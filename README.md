@@ -10,3 +10,9 @@ To make it easier for tenants to make a request for renting stuff from the SHC, 
 * Create a Dashboard for Rentalmangers to manage requests and set states.
 * See pending, current, finished requests
 * Archive the requests
+
+## Possible future projects
+* Inventorymanagement
+** SHC
+** Bar
+* Eventmanagement
