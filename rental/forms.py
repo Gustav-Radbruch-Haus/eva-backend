@@ -23,12 +23,6 @@ class RentalrequestForm(ModelForm):
         rentalsForTheFacility = models.Rental.objects.filter(facility=facility)
         deHolidays = us_holidays = holidays.CountryHoliday('DE', prov='HH')
 
-
-        if facility == models.Rental.BAR or facility == models.Rental.TEA_ROOM:
-            if begin.date() in deHolidays or end.date() in deHolidays:
-                raise ValidationError(
-                    "The cannot be a rental during hoolidays!")
-
         # Valid options for Bar-Rental
         if facility == models.Rental.BAR:
             if begin.isoweekday() == 5 or begin.isoweekday() == 7:
@@ -52,10 +46,15 @@ class RentalrequestForm(ModelForm):
             raise ValidationError(
                 {'begin': ["The begin of the rental has to be before the end of it.", ]})
 
-        for rental in rentalsForTheFacility:
-            if rental.begin <= begin and begin <= (rental.end + timedelta(minutes=59)):
-                raise ValidationError({'begin': ["The facility is already rented on that date and time!", ]})
-            if (rental.begin - timedelta(minutes=59)) <= end and end <= (rental.end + timedelta(minutes=59)):
-                raise ValidationError({'end': ["The facility is already rented on that date and time!", ]})
-            if begin <= rental.begin and rental.end <= end:
-                raise ValidationError("The facility is already rented on that date and time!")
+        if facility == models.Rental.BAR or facility == models.Rental.TEA_ROOM:
+            if begin.date() in deHolidays or end.date() in deHolidays:
+                raise ValidationError(
+                    "The cannot be a rental during hoolidays!")
+
+            for rental in rentalsForTheFacility:
+                if rental.begin <= begin and begin <= (rental.end + timedelta(minutes=59)):
+                    raise ValidationError({'begin': ["The facility is already rented on that date and time!", ]})
+                if (rental.begin - timedelta(minutes=59)) <= end and end <= (rental.end + timedelta(minutes=59)):
+                    raise ValidationError({'end': ["The facility is already rented on that date and time!", ]})
+                if begin <= rental.begin and rental.end <= end:
+                    raise ValidationError("The facility is already rented on that date and time!")
