@@ -1,4 +1,4 @@
-# EVA - Elektronische Verwaltungs Assistentin
+# EVA - Elektronische Verwaltungs Assistent
 ## Intro
 This app is designed to aggregate tools to interact with tenants.
 
