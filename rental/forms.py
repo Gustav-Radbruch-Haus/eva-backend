@@ -23,6 +23,7 @@ class RentalrequestForm(ModelForm):
         rentalsForTheFacility = models.Rental.objects.filter(facility=facility)
         deHolidays = us_holidays = holidays.CountryHoliday('DE', prov='HH')
 
+        ### VALIDATION OF RENTAL REQUESTS ###
         # Valid options for Bar-Rental
         if facility == models.Rental.BAR:
             if begin.isoweekday() == 5 or begin.isoweekday() == 7:
@@ -38,14 +39,12 @@ class RentalrequestForm(ModelForm):
                 raise ValidationError(
                     "The BAR has to be returned before 15:00:00 (3:00:00 PM) the next day!")
 
+        # Validate DateTime
         if begin > end:
             raise ValidationError(
                 {'begin': ["The begin of the rental has to be before the end of it.", ]})
 
-        if end < begin:
-            raise ValidationError(
-                {'begin': ["The begin of the rental has to be before the end of it.", ]})
-
+        # Special validations for Bar and Tea Room
         if facility == models.Rental.BAR or facility == models.Rental.TEA_ROOM:
             if begin.date() in deHolidays or end.date() in deHolidays:
                 raise ValidationError(
@@ -53,8 +52,11 @@ class RentalrequestForm(ModelForm):
 
             for rental in rentalsForTheFacility:
                 if rental.begin <= begin and begin <= (rental.end + timedelta(minutes=59)):
-                    raise ValidationError({'begin': ["The facility is already rented on that date and time!", ]})
+                    raise ValidationError(
+                        {'begin': ["The facility is already rented on that date and time!", ]})
                 if (rental.begin - timedelta(minutes=59)) <= end and end <= (rental.end + timedelta(minutes=59)):
-                    raise ValidationError({'end': ["The facility is already rented on that date and time!", ]})
+                    raise ValidationError(
+                        {'end': ["The facility is already rented on that date and time!", ]})
                 if begin <= rental.begin and rental.end <= end:
-                    raise ValidationError("The facility is already rented on that date and time!")
+                    raise ValidationError(
+                        "The facility is already rented on that date and time!")

@@ -1,0 +1,209 @@
+{% extends "base.html" %}
+{% load static%}
+{% load widget_tweaks %}
+
+{% block breadcrumb %}
+<div class="row wrapper border-bottom white-bg page-heading">
+        <div class="col-lg-10">
+            <h2>Profile</h2>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="/">Home</a>
+                </li>
+                <li class="breadcrumb-item">
+                    <a>Rentals</a>
+                </li>
+                <li class="breadcrumb-item active">
+                    <strong>Dashboard</strong>
+                </li>
+            </ol>
+        </div>
+    </div>
+{% endblock %}
+{% block main_content %}
+<div class="row">
+    <div class="col-lg-3">
+        <div class="ibox ">
+            <div class="ibox-title">
+                <h5>Pending</h5>
+            </div>
+            <div class="ibox-content">
+                <h1 class="no-margins">{{ req_pending_count }}</h1>
+                <small>Requests pending</small>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3">
+        <div class="ibox ">
+            <div class="ibox-title">
+                <h5>Upcoming</h5>
+            </div>
+            <div class="ibox-content">
+                <h1 class="no-margins">{{ req_upcoming_count }}</h1>
+                <small>Requests upcoming</small>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3">
+        <div class="ibox ">
+            <div class="ibox-title">
+                <h5>Running</h5>
+            </div>
+            <div class="ibox-content">
+                <h1 class="no-margins">{{ req_running_count }}</h1>
+                <small>Requests currently running</small>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3">
+        <div class="ibox ">
+            <div class="ibox-title">
+                <h5>Finished</h5>
+            </div>
+            <div class="ibox-content">
+                <h1 class="no-margins">{{ req_finished_count }}</h1>
+                <small>Rentals finished</small>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-3">
+        <div class="ibox ">
+            <div class="ibox-title">
+                <h5>Pending Requests</h5>
+                <div class="ibox-tools">
+                    <a class="collapse-link">
+                        <i class="fa fa-chevron-up"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="ibox-content ibox-heading">
+                <h3><i class="fa fa-envelope-o"></i> Pending Requests </h3>
+                <small><i class="fa fa-tim"></i> There are {{ req_pending_count }} requests pending. </small>
+            </div>
+            <div class="ibox-content">
+                <div class="feed-activity-list">
+{% for req in req_pending %}
+                    <div class="feed-element" data-location = "{% url 'requestDetail' req.slug %}">
+                        <div>
+                            <small class="float-right text-navy">{{ req.begin|date:'d.m.Y' }}</small>
+                            <strong>{{ req.get_facility_display }} : {{ req.firstname }} {{ req.surname }}</strong>
+                            <div>{{req.reason}}
+                            </div>
+                            <small class="text-muted">{{ req.begin|date:'d.m.Y H:i' }} to {{ req.begin|date:'d.m.Y H:i' }}</small>
+                        </div>
+                    </div>
+{% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-3">
+        <div class="ibox ">
+            <div class="ibox-title">
+                <h5>Upcoming Requests</h5>
+                <div class="ibox-tools">
+                    <a class="collapse-link">
+                        <i class="fa fa-chevron-up"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="ibox-content ibox-heading">
+                <h3><i class="fa fa-clock-o"></i> Upcoming Requests </h3>
+                <small><i class="fa fa-tim"></i> There are {{ req_upcoming_count }} requests upcoming. </small>
+            </div>
+            <div class="ibox-content">
+                <div class="feed-activity-list">
+{% for req in req_upcoming %}
+                    <div class="feed-element" data-location = "{% url 'requestDetail' req.slug %}">
+                        <div>
+                            <small class="float-right text-navy">{{ req.begin|date:'d.m.Y' }}</small>
+                            <strong>{{ req.get_facility_display }} : {{ req.firstname }} {{ req.surname }}</strong>
+                            <div>{{req.reason}}
+                            </div>
+                            <small class="text-muted">{{ req.begin|date:'d.m.Y H:i' }} to {{ req.begin|date:'d.m.Y H:i' }}</small>
+                        </div>
+                    </div>
+{% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3">
+        <div class="ibox ">
+            <div class="ibox-title">
+                <h5>Running Requests</h5>
+                <div class="ibox-tools">
+                    <a class="collapse-link">
+                        <i class="fa fa-chevron-up"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="ibox-content ibox-heading">
+                <h3><i class="fa fa-angle-double-right"></i> Running Requests </h3>
+                <small><i class="fa fa-tim"></i> Currently active Rentals </small>
+            </div>
+            <div class="ibox-content">
+                <div class="feed-activity-list">
+{% for req in req_running %}
+                    <div class="feed-element" data-location = "{% url 'requestDetail' req.slug %}">
+                        <div>
+                            <small class="float-right text-navy">{{ req.begin|date:'d.m.Y' }}</small>
+                            <strong>{{ req.get_facility_display }} : {{ req.firstname }} {{ req.surname }}</strong>
+                            <div>{{req.reason}}
+                            </div>
+                            <small class="text-muted">{{ req.begin|date:'d.m.Y H:i' }} to {{ req.begin|date:'d.m.Y H:i' }}</small>
+                        </div>
+                    </div>
+{% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="col-lg-3">
+        <div class="ibox ">
+            <div class="ibox-title">
+                <h5>Finished Requests</h5>
+                <div class="ibox-tools">
+                    <a class="collapse-link">
+                        <i class="fa fa-chevron-up"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="ibox-content ibox-heading">
+                <h3><i class="fa fa-check"></i> Finished Requests </h3>
+                <small><i class="fa fa-tim"></i> Showing the last 10 Rentals </small>
+            </div>
+            <div class="ibox-content">
+                <div class="feed-activity-list">
+{% for req in req_finished %}
+                    <div class="feed-element content" data-location = "{% url 'requestDetail' req.slug %}">
+                        <div>
+                            <small class="float-right text-navy">{{ req.begin|date:'d.m.Y' }}</small>
+                            <strong>{{ req.get_facility_display }} : {{ req.firstname }} {{ req.surname }}</strong>
+                            <div>{{req.reason}}
+                            </div>
+                            <small class="text-muted">{{ req.begin|date:'d.m.Y H:i' }} to {{ req.begin|date:'d.m.Y H:i' }}</small>
+                        </div>
+                    </div>
+{% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+{% endblock %}
+
+{% block body_script %}
+<script>
+$(".feed-element").click(function() {
+  window.location = $(this).data("location");
+  return false;
+});
+</script>
+{% endblock %}

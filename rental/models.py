@@ -1,4 +1,5 @@
 from django.db import models
+import uuid
 # Create your models here.
 
 
@@ -35,6 +36,7 @@ class Rental(models.Model):
         (WS_TOOLS, 'Workshop Tools'),
     ]
 
+    slug = models.SlugField()
     received_on = models.DateField(auto_now_add=True)
     begin = models.DateTimeField()
     end = models.DateTimeField()
@@ -60,3 +62,17 @@ class Rental(models.Model):
 
     def __str__(self):
         return '%s:%s %s >> %s: %s to %s' % (self.get_facility_display(), self.firstname, self.surname, self.begin.date(), self.begin.time(), self.end.time())
+
+    def _get_unique_slug(self):
+        slug = uuid.uuid4()
+        unique_slug = slug
+        num = 1
+        while Rental.objects.filter(slug=unique_slug).exists():
+            unique_slug = '{}-{}'.format(slug, num)
+            num += 1
+        return unique_slug
+ 
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = self._get_unique_slug()
+        super().save(*args, **kwargs)
