@@ -1,8 +1,10 @@
 from django.urls import path
+from django.conf.urls import url
 
 from . import views
 
 urlpatterns = [
+    #url(r'^$', views.index, name='redirect-to-login'),
     path('', views.index, name='rentalDashboardIndex'),
     path('dashboard/', views.index, name='rentalDashboard'),
     path('request/', views.makeRequest, name='makeRequest'),
