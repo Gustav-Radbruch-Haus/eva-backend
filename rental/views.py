@@ -24,6 +24,7 @@ def index(request):
 @login_required
 def showDetails(request, requestSlug):
     instance = get_object_or_404(models.Rental, slug=requestSlug)
+    instance_comments = models.RentalComment.objects.filter(rental=instance.id).order_by('-created_at')
     if request.method == 'POST':
         # create a form instance and populate it with data from the request:
         form = forms.RentalCommentForm(request.POST)
@@ -34,11 +35,12 @@ def showDetails(request, requestSlug):
             sF.creator = request.user
             sF.rental = instance
             sF.save()
-            return HttpResponseRedirect(reverse('requestDetail', args=[requestSlug]))
+            return TemplateResponse(request, 'rentals/details.html', {'reqID':requestSlug, 'req':instance, 'comments':instance_comments, 'form': forms.RentalCommentForm()})
     # if a GET (or any other method) we'll create a blank form
     else:
-        instance_comments = models.RentalComment.objects.filter(rental=instance.id).order_by('-created_at')
-        return TemplateResponse(request, 'rentals/details.html', {'reqID':requestSlug, 'req':instance, 'comments':instance_comments, 'form': forms.RentalCommentForm()})
+        form = forms.RentalCommentForm()
+
+    return TemplateResponse(request, 'rentals/details.html', {'reqID':requestSlug, 'req':instance, 'comments':instance_comments, 'form': form})
 
 @login_required
 def commentOnRequest(request, requestSlug):
