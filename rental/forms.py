@@ -3,6 +3,10 @@ from datetime import timedelta
 import holidays
 from . import models
 
+class RentalCommentForm(ModelForm):
+    class Meta:
+        model = models.RentalComment
+        fields = ['comment']
 
 class RentalrequestForm(ModelForm):
     class Meta:

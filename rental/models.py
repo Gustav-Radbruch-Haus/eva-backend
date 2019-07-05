@@ -1,4 +1,5 @@
 from django.db import models
+from django.conf import settings
 import uuid
 # Create your models here.
 
@@ -36,6 +37,7 @@ class Rental(models.Model):
         (WS_TOOLS, 'Workshop Tools'),
     ]
 
+    objects = models.Manager()
     slug = models.SlugField()
     received_on = models.DateField(auto_now_add=True)
     begin = models.DateTimeField()
@@ -71,8 +73,14 @@ class Rental(models.Model):
             unique_slug = '{}-{}'.format(slug, num)
             num += 1
         return unique_slug
- 
+
     def save(self, *args, **kwargs):
         if not self.slug:
             self.slug = self._get_unique_slug()
         super().save(*args, **kwargs)
+
+class RentalComment(models.Model):
+    rental = models.ForeignKey(Rental, on_delete=models.CASCADE)
+    creator = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.DO_NOTHING)
+    created_at = models.DateTimeField(auto_now_add=True)
+    comment = models.TextField()
