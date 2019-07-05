@@ -1,15 +1,18 @@
 from django.shortcuts import render, get_object_or_404
 from django.template.response import TemplateResponse
+from django.http import HttpResponseRedirect
+from django.urls import reverse
+from django.contrib.auth.decorators import login_required
 #import request as req
 from . import forms
 from . import models
 
 # Create your views here.
 
-
+@login_required
 def index(request):
     req_pending = models.Rental.objects.filter(
-        state=models.Rental.PENDING).order_by('begin')
+        state=models.Rental.PENDING).order_by('received_on')
     req_upcoming = models.Rental.objects.filter(
         state=models.Rental.ACCEPTED).order_by('begin')
     req_running = models.Rental.objects.filter(
@@ -18,8 +21,49 @@ def index(request):
         state=models.Rental.FINISHED).order_by('begin')[:10]
     return TemplateResponse(request, 'rentals/dashboard.html', {'req_upcoming_count': req_upcoming.count(), 'req_pending_count': req_pending.count(), 'req_running_count': 2, 'req_finished_count': 25, 'req_pending': req_pending, 'req_upcoming': req_upcoming, 'req_running': req_running, 'req_finished': req_finished})
 
+@login_required
 def showDetails(request, requestSlug):
+    instance = get_object_or_404(models.Rental, slug=requestSlug)
+    if request.method == 'POST':
+        # create a form instance and populate it with data from the request:
+        form = forms.RentalCommentForm(request.POST)
+        # check whether it's valid:
+        if form.is_valid():
+            # process the data in form.cleaned_data as required
+            sF = form.save(commit=False)
+            sF.creator = request.user
+            sF.rental = instance
+            sF.save()
+            return HttpResponseRedirect(reverse('requestDetail', args=[requestSlug]))
+    # if a GET (or any other method) we'll create a blank form
+    else:
+        instance_comments = models.RentalComment.objects.filter(rental=instance.id).order_by('-created_at')
+        return TemplateResponse(request, 'rentals/details.html', {'reqID':requestSlug, 'req':instance, 'comments':instance_comments, 'form': forms.RentalCommentForm()})
+
+@login_required
+def commentOnRequest(request, requestSlug):
+    rental = get_object_or_404(models.Rental, slug=requestSlug)
+    if request.method == 'POST':
+        # create a form instance and populate it with data from the request:
+        form = forms.RentalCommentForm(request.POST)
+        # check whether it's valid:
+        if form.is_valid():
+            # process the data in form.cleaned_data as required
+            instance = form.save(commit=False)
+            instance.creator = request.user
+            instance.rental = rental.id
+            return HttpResponseRedirect(reverse('requestDetail', args=[requestSlug]))
+    # if a GET (or any other method) we'll create a blank form
+    else:
+        return HttpResponseRedirect(reverse('requestDetail', args=[requestSlug]))
+
+
+@login_required
+def acceptRequest(request, requestSlug):
         instance = get_object_or_404(models.Rental, slug=requestSlug)
+        instance.state = models.Rental.ACCEPTED
+        # TODO Ignore instance that are not pending
+        instance.save()
         return TemplateResponse(request, 'registration/profile.html', {'reqID':requestSlug, 'req':instance})
 
 def makeRequest(request):

@@ -27,8 +27,8 @@
                 <li class="nav-header">
                     <div class="dropdown profile-element">
                         <a data-toggle="dropdown" class="dropdown-toggle" href="#">
-                            <span class="block m-t-xs font-bold">Example user</span>
-                            <span class="text-muted text-xs block">menu <b class="caret"></b></span>
+                            <span class="block m-t-xs font-bold">{{user.get_full_name}}</span>
+                            <span class="text-muted text-xs block"><i class="fa fa-cog" aria-hidden="true"></i> <b class="caret"></b></span>
                         </a>
                         <ul class="dropdown-menu animated fadeInRight m-t-xs">
                             <li><a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li>
@@ -81,7 +81,7 @@
 {% block footer_right %}{% endblock %}
             </div>
             <div>
-                <strong>Copyright</strong> Example Company &copy; 2014-2018
+                <strong>Copyright</strong> Studentische Selbstverwaltung "Gustav-Radbruch-Haus" &copy; 2018-2019
             </div>
         </div>
 

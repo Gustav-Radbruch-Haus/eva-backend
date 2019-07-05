@@ -1,0 +1,416 @@
+{% extends "base.html" %}
+{% load static%}
+{% load widget_tweaks %}
+
+{% block breadcrumb %}
+<div class="row wrapper border-bottom white-bg page-heading">
+        <div class="col-lg-10">
+            <h2>Rental Details</h2>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="/">Home</a>
+                </li>
+                <li class="breadcrumb-item">
+                    <a>Rentals</a>
+                </li>
+                <li class="breadcrumb-item active">
+                    <strong>Detail</strong>
+                </li>
+            </ol>
+        </div>
+    </div>
+{% endblock %}
+{% block main_content %}
+<div class="row">
+    <div class="col-lg-9">
+            <div class="ibox">
+                <div class="ibox-content">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="m-b-md">
+                                <a href="#" class="btn btn-white btn-xs float-right">Rental Details</a>
+                                <h2>{{req.get_facility_display}}: {{req.firstname}} {{req.surname}}</h2>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <dl class="row mb-0">
+                                <div class="col-sm-4 text-sm-right"><dt>Status:</dt> </div>
+                                <div class="col-sm-8 text-sm-left"><dd class="mb-1"><span class="label label-warning">{{req.get_state_display}}</span></dd></div>
+                            </dl>
+                            <dl class="row mb-0">
+                                <div class="col-sm-4 text-sm-right"><dt>Room:</dt> </div>
+                                <div class="col-sm-8 text-sm-left"><dd class="mb-1">{{req.appartement}}</dd> </div>
+                            </dl>
+                            <dl class="row mb-0">
+                                <div class="col-sm-4 text-sm-right"><dt>Date:</dt> </div>
+                                <div class="col-sm-8 text-sm-left"> <dd class="mb-1">{{ req.begin|date:'d.m.Y H:i' }} to {{ req.begin|date:'d.m.Y H:i' }}</dd></div>
+                            </dl>
+                        </div>
+                        <div class="col-lg-6" id="cluster_info">
+
+                            <dl class="row mb-0">
+                                <div class="col-sm-4 text-sm-right">
+                                    <dt>Mail:</dt>
+                                </div>
+                                <div class="col-sm-8 text-sm-left">
+                                    <dd class="mb-1">{{req.email}}</dd>
+                                </div>
+                            </dl>
+                            <dl class="row mb-0">
+                                <div class="col-sm-4 text-sm-right">
+                                    <dt>Phone:</dt>
+                                </div>
+                                <div class="col-sm-8 text-sm-left">
+                                    <dd class="mb-1"> {{req.phone}}</dd>
+                                </div>
+                            </dl>
+                            <dl class="row mb-0">
+                                <div class="col-sm-4 text-sm-right">
+                                    <dt>Participants:</dt>
+                                </div>
+                                <div class="col-sm-8 text-sm-left">
+                                    <dd class="mb-1">
+                                        {{req.estinated_number_of_people}}
+                                    </dd>
+                                </div>
+                            </dl>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <dl class="row mb-0">
+                                <div class="col-sm-2 text-sm-right">
+                                    <dt>Completed:</dt>
+                                </div>
+                                <div class="col-sm-10 text-sm-left">
+                                    <dd>
+                                        <div class="progress m-b-1">
+                                            <div style="width: 60%;" class="progress-bar progress-bar-striped progress-bar-animated"></div>
+                                        </div>
+                                        <small>Project completed in <strong>60%</strong>. Remaining close the project, sign a contract and invoice.</small>
+                                    </dd>
+                                </div>
+                            </dl>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <dl class="row mb-0">
+                                <div class="col-sm-2 text-sm-right">
+                                    <dt>Comment:</dt>
+                                </div>
+                                <div class="col-sm-10 text-sm-left">
+                                    <dd>
+                                        {{req.comment}}
+                                    </dd>
+                                </div>
+                            </dl>
+                        </div>
+                    </div>
+                    <div class="row m-t-sm">
+                        <div class="col-lg-12">
+                        <div class="panel blank-panel">
+                        <div class="panel-heading">
+                            <div class="panel-options">
+                                <ul class="nav nav-tabs">
+                                    <li><a class="nav-link active" href="#tab-1" data-toggle="tab">Comments</a></li>
+                                    <li><a class="nav-link" href="#tab-2" data-toggle="tab">Last activity</a></li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="panel-body">
+
+                        <div class="tab-content">
+                        <div class="tab-pane active" id="tab-1">
+                            <div class="feed-activity-list">
+                                {% for comment in comments %}
+                                <div class="feed-element">
+                                    <div class="media-body ">
+                                        <small class="float-right"></small>
+                                        <strong>{{comment.creator.get_full_name}}</strong> commented on this rental. <br>
+                                        <small class="text-muted">{{comment.created_at}}</small>
+                                        <div class="well">
+                                            {{comment.comment}}
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+
+                        </div>
+                        <div class="tab-pane" id="tab-2">
+
+                            <table class="table table-striped">
+                                <thead>
+                                <tr>
+                                    <th>Status</th>
+                                    <th>Title</th>
+                                    <th>Start Time</th>
+                                    <th>End Time</th>
+                                    <th>Comments</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td>
+                                        <span class="label label-primary"><i class="fa fa-check"></i> Completed</span>
+                                    </td>
+                                    <td>
+                                       Create project in webapp
+                                    </td>
+                                    <td>
+                                       12.07.2014 10:10:1
+                                    </td>
+                                    <td>
+                                        14.07.2014 10:16:36
+                                    </td>
+                                    <td>
+                                    <p class="small">
+                                        Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable.
+                                    </p>
+                                    </td>
+
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span class="label label-primary"><i class="fa fa-check"></i> Accepted</span>
+                                    </td>
+                                    <td>
+                                        Various versions
+                                    </td>
+                                    <td>
+                                        12.07.2014 10:10:1
+                                    </td>
+                                    <td>
+                                        14.07.2014 10:16:36
+                                    </td>
+                                    <td>
+                                        <p class="small">
+                                            Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).
+                                        </p>
+                                    </td>
+
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span class="label label-primary"><i class="fa fa-check"></i> Sent</span>
+                                    </td>
+                                    <td>
+                                        There are many variations
+                                    </td>
+                                    <td>
+                                        12.07.2014 10:10:1
+                                    </td>
+                                    <td>
+                                        14.07.2014 10:16:36
+                                    </td>
+                                    <td>
+                                        <p class="small">
+                                            There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which
+                                        </p>
+                                    </td>
+
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span class="label label-primary"><i class="fa fa-check"></i> Reported</span>
+                                    </td>
+                                    <td>
+                                        Latin words
+                                    </td>
+                                    <td>
+                                        12.07.2014 10:10:1
+                                    </td>
+                                    <td>
+                                        14.07.2014 10:16:36
+                                    </td>
+                                    <td>
+                                        <p class="small">
+                                            Latin words, combined with a handful of model sentence structures
+                                        </p>
+                                    </td>
+
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span class="label label-primary"><i class="fa fa-check"></i> Accepted</span>
+                                    </td>
+                                    <td>
+                                        The generated Lorem
+                                    </td>
+                                    <td>
+                                        12.07.2014 10:10:1
+                                    </td>
+                                    <td>
+                                        14.07.2014 10:16:36
+                                    </td>
+                                    <td>
+                                        <p class="small">
+                                            The generated Lorem Ipsum is therefore always free from repetition, injected humour, or non-characteristic words etc.
+                                        </p>
+                                    </td>
+
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span class="label label-primary"><i class="fa fa-check"></i> Sent</span>
+                                    </td>
+                                    <td>
+                                        The first line
+                                    </td>
+                                    <td>
+                                        12.07.2014 10:10:1
+                                    </td>
+                                    <td>
+                                        14.07.2014 10:16:36
+                                    </td>
+                                    <td>
+                                        <p class="small">
+                                            The first line of Lorem Ipsum, "Lorem ipsum dolor sit amet..", comes from a line in section 1.10.32.
+                                        </p>
+                                    </td>
+
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span class="label label-primary"><i class="fa fa-check"></i> Reported</span>
+                                    </td>
+                                    <td>
+                                        The standard chunk
+                                    </td>
+                                    <td>
+                                        12.07.2014 10:10:1
+                                    </td>
+                                    <td>
+                                        14.07.2014 10:16:36
+                                    </td>
+                                    <td>
+                                        <p class="small">
+                                            The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for those interested.
+                                        </p>
+                                    </td>
+
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span class="label label-primary"><i class="fa fa-check"></i> Completed</span>
+                                    </td>
+                                    <td>
+                                        Lorem Ipsum is that
+                                    </td>
+                                    <td>
+                                        12.07.2014 10:10:1
+                                    </td>
+                                    <td>
+                                        14.07.2014 10:16:36
+                                    </td>
+                                    <td>
+                                        <p class="small">
+                                            Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable.
+                                        </p>
+                                    </td>
+
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span class="label label-primary"><i class="fa fa-check"></i> Sent</span>
+                                    </td>
+                                    <td>
+                                        Contrary to popular
+                                    </td>
+                                    <td>
+                                        12.07.2014 10:10:1
+                                    </td>
+                                    <td>
+                                        14.07.2014 10:16:36
+                                    </td>
+                                    <td>
+                                        <p class="small">
+                                            Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical
+                                        </p>
+                                    </td>
+
+                                </tr>
+
+                                </tbody>
+                            </table>
+
+                        </div>
+                        </div>
+
+                        </div>
+
+                        </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <div class="col-lg-3">
+        <div class="wrapper wrapper-content project-manager">
+            <h4>Project options</h4>
+            <p class="small">
+                Lorem ipsum. Hier kann noch was stehen
+            </p>
+            <h5>Actions</h5>
+            <div class="text-center m-t-md">
+                <a href="{% url 'acceptRequest' req.slug %}" class="btn btn-lg btn-primary">Approve</a>
+                <a href="#" class="btn btn-lg btn-danger">Reject</a>
+
+            </div>
+        </div>
+
+        <div class="wrapper wrapper-content project-manager">
+                <form method="post" novalidate>
+                        {% csrf_token %}
+    
+                        {% for hidden_field in form.hidden_fields %}
+                        {{ hidden_field }}
+                        {% endfor %}
+    
+                        {% if form.non_field_errors %}
+                        <div class="alert alert-danger" role="alert">
+                            {% for error in form.non_field_errors %}
+                            {{ error }}
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+    
+                        {% for field in form.visible_fields %}
+                        <div class="form-group">
+                            {{ field.label_tag }}
+    
+                            {% if form.is_bound %}
+                            {% if field.errors %}
+                            {% render_field field class="form-control is-invalid" %}
+                            {% for error in field.errors %}
+                            <div class="invalid-feedback">
+                                {{ error }}
+                            </div>
+                            {% endfor %}
+                            {% else %}
+                            {% render_field field class="form-control is-valid" %}
+                            {% endif %}
+                            {% else %}
+                            {% render_field field class="form-control" %}
+                            {% endif %}
+    
+                            {% if field.help_text %}
+                            <small class="form-text text-muted">{{ field.help_text }}</small>
+                            {% endif %}
+                        </div>
+                        {% endfor %}
+    
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </form>
+            </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block body_script %}
+{% endblock %}
