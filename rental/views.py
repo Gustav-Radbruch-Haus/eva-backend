@@ -19,7 +19,7 @@ def index(request):
         state=models.Rental.IN_PROGRESS).order_by('begin')
     req_finished = models.Rental.objects.filter(
         state=models.Rental.FINISHED).order_by('begin')[:10]
-    return TemplateResponse(request, 'rentals/dashboard.html', {'req_upcoming_count': req_upcoming.count(), 'req_pending_count': req_pending.count(), 'req_running_count': 2, 'req_finished_count': 25, 'req_pending': req_pending, 'req_upcoming': req_upcoming, 'req_running': req_running, 'req_finished': req_finished})
+    return TemplateResponse(request, 'rentals/dashboard.html', {'req_upcoming_count': req_upcoming.count(), 'req_pending_count': req_pending.count(), 'req_running_count': req_running.count() , 'req_finished_count': req_finished.count(), 'req_pending': req_pending, 'req_upcoming': req_upcoming, 'req_running': req_running, 'req_finished': req_finished})
 
 @login_required
 def showDetails(request, requestSlug):

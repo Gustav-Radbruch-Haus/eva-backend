@@ -45,6 +45,11 @@
                         <li><a href="{% url 'makeRequest' %}">Make a request</a></li>
                     </ul>
                 </li>
+                {% if user.is_superuser %}
+                <li>
+                    <a href="/admin/"><i class="fa fa-wrench"></i> <span class="nav-label">Administration</span>     <span class="label label-danger">Danger</span></a>
+                </li>
+                {% endif %}
             </ul>
 
         </div>
