@@ -66,7 +66,7 @@ def acceptRequest(request, requestSlug):
         instance.state = models.Rental.ACCEPTED
         # TODO Ignore instance that are not pending
         instance.save()
-        return TemplateResponse(request, 'registration/profile.html', {'reqID':requestSlug, 'req':instance})
+        return HttpResponseRedirect(reverse('rentalDashboard'))
 
 def makeRequest(request):
     # if this is a POST request we need to process the form data
