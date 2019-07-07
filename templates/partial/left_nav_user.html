@@ -1,0 +1,33 @@
+<nav class="navbar-default navbar-static-side" role="navigation">
+    <div class="sidebar-collapse">
+        <ul class="nav metismenu" id="side-menu">
+            <li class="nav-header">
+                <div class="dropdown profile-element">
+                    <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                        <span class="block m-t-xs font-bold">{{user.get_full_name}}</span>
+                        <span class="text-muted text-xs block"><i class="fa fa-cog" aria-hidden="true"></i> <b class="caret"></b></span>
+                    </a>
+                    <ul class="dropdown-menu animated fadeInRight m-t-xs">
+                        <li><a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li>
+                    </ul>
+                </div>
+                <div class="logo-element">
+                    IN+
+                </div>
+            </li>
+            <li>
+                <a href="#"><i class="fa fa-key"></i> <span class="nav-label">Rentals</span><span class="fa arrow"></span></a>
+                <ul class="nav nav-second-level collapse">
+                    <li><a href="{% url 'rentalDashboard' %}">Dashboard</a></li>
+                    <li><a href="{% url 'makeRequest' %}">Make a request</a></li>
+                </ul>
+            </li>
+            {% if user.is_superuser %}
+            <li>
+                <a href="/admin/"><i class="fa fa-wrench"></i> <span class="nav-label">Administration</span>     <span class="label label-danger">Danger</span></a>
+            </li>
+            {% endif %}
+        </ul>
+
+    </div>
+</nav>
