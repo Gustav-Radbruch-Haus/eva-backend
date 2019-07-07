@@ -129,6 +129,9 @@
                             <div class="feed-activity-list">
                                 {% for comment in comments %}
                                 <div class="feed-element">
+                                        <a href="#" class="float-left">
+                                                <img alt="image" class="rounded-circle" src="https://ui-avatars.com/api/?name={{comment.creator.get_full_name}}">
+                                        </a>
                                     <div class="media-body ">
                                         <small class="float-right"></small>
                                         <strong>{{comment.creator.get_full_name}}</strong> commented on this rental. <br>
