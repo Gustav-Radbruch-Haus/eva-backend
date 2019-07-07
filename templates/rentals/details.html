@@ -361,8 +361,18 @@
             </p>
             <h5>Actions</h5>
             <div class="text-center m-t-md">
+                {% if req.state == "PD" %}
                 <a href="{% url 'acceptRequest' req.slug %}" class="btn btn-lg btn-primary">Approve</a>
-                <a href="#" class="btn btn-lg btn-danger">Reject</a>
+                <a href="{% url 'rejectRequest' req.slug %}" class="btn btn-lg btn-danger">Reject</a>
+                {% elif req.state == "AC" %}
+                <a href="{% url 'startRequest' req.slug %}" class="btn btn-lg btn-primary">Start</a>
+                <a href="{% url 'rejectRequest' req.slug %}" class="btn btn-lg btn-danger">Reject</a>
+                {% elif req.state == "IP" %}
+                <a href="{% url 'finishRequest' req.slug %}" class="btn btn-lg btn-primary">Finish</a>
+                <a href="{% url 'clarifyRequest' req.slug %}" class="btn btn-lg btn-danger">Clarify</a>
+                {% elif req.state == "CL" %}
+                <a href="{% url 'finishRequest' req.slug %}" class="btn btn-lg btn-primary">Finish</a>
+                {% endif %}
 
             </div>
         </div>

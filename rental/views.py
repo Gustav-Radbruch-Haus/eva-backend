@@ -68,6 +68,39 @@ def acceptRequest(request, requestSlug):
         instance.save()
         return HttpResponseRedirect(reverse('rentalDashboard'))
 
+@login_required
+def rejectRequest(request, requestSlug):
+        instance = get_object_or_404(models.Rental, slug=requestSlug)
+        instance.state = models.Rental.REJECTED
+        # TODO Ignore instance that are not pending
+        instance.save()
+        return HttpResponseRedirect(reverse('rentalDashboard'))
+
+@login_required
+def startRequest(request, requestSlug):
+        instance = get_object_or_404(models.Rental, slug=requestSlug)
+        instance.state = models.Rental.IN_PROGRESS
+        # TODO Ignore instance that are not pending
+        instance.save()
+        return HttpResponseRedirect(reverse('rentalDashboard'))
+
+@login_required
+def finishRequest(request, requestSlug):
+        instance = get_object_or_404(models.Rental, slug=requestSlug)
+        instance.state = models.Rental.FINISHED
+        # TODO Ignore instance that are not pending
+        instance.save()
+        return HttpResponseRedirect(reverse('rentalDashboard'))
+
+
+@login_required
+def clarifyRequest(request, requestSlug):
+        instance = get_object_or_404(models.Rental, slug=requestSlug)
+        instance.state = models.Rental.CLARIFICATION
+        # TODO Ignore instance that are not pending
+        instance.save()
+        return HttpResponseRedirect(reverse('rentalDashboard'))
+
 def makeRequest(request):
     # if this is a POST request we need to process the form data
     if request.method == 'POST':
