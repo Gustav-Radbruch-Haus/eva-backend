@@ -33,7 +33,7 @@
                     <div class="feed-element" style="cursor: pointer;" data-location = "{% url 'requestDetail' req.slug %}">
                         <div>
                             <small class="float-right text-navy">{{ req.begin|date:'d.m.Y' }}</small>
-                            <strong>{{ req.get_facility_display }} : {{ req.firstname }} {{ req.surname }}</strong>
+                            <strong>{{ req.facility }} : {{ req.firstname }} {{ req.surname }}</strong>
                             <div>{{req.reason}}
                             </div>
                             <small class="text-muted">{{ req.begin|date:'d.m.Y H:i' }} to {{ req.begin|date:'d.m.Y H:i' }}</small>
@@ -56,7 +56,7 @@
                     <div class="feed-element" style="cursor: pointer;" data-location = "{% url 'requestDetail' req.slug %}">
                         <div>
                             <small class="float-right text-navy">{{ req.begin|date:'d.m.Y' }}</small>
-                            <strong>{{ req.get_facility_display }} : {{ req.firstname }} {{ req.surname }}</strong>
+                            <strong>{{ req.facility }} : {{ req.firstname }} {{ req.surname }}</strong>
                             <div>{{req.reason}}
                             </div>
                             <small class="text-muted">{{ req.begin|date:'d.m.Y H:i' }} to {{ req.begin|date:'d.m.Y H:i' }}</small>
@@ -78,7 +78,7 @@
                     <div class="feed-element" style="cursor: pointer;" data-location = "{% url 'requestDetail' req.slug %}">
                         <div>
                             <small class="float-right text-navy">{{ req.begin|date:'d.m.Y' }}</small>
-                            <strong>{{ req.get_facility_display }} : {{ req.firstname }} {{ req.surname }}</strong>
+                            <strong>{{ req.facility }} : {{ req.firstname }} {{ req.surname }}</strong>
                             <div>{{req.reason}}
                             </div>
                             <small class="text-muted">{{ req.begin|date:'d.m.Y H:i' }} to {{ req.begin|date:'d.m.Y H:i' }}</small>
@@ -102,7 +102,7 @@
                     <div class="feed-element content" style="cursor: pointer;" data-location = "{% url 'requestDetail' req.slug %}">
                         <div>
                             <small class="float-right text-navy">{{ req.begin|date:'d.m.Y' }}</small>
-                            <strong>{{ req.get_facility_display }} : {{ req.firstname }} {{ req.surname }}</strong>
+                            <strong>{{ req.facility }} : {{ req.firstname }} {{ req.surname }}</strong>
                             <div>{{req.reason}}
                             </div>
                             <small class="text-muted">{{ req.begin|date:'d.m.Y H:i' }} to {{ req.begin|date:'d.m.Y H:i' }}</small>

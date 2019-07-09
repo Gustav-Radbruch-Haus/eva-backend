@@ -4,6 +4,13 @@ import uuid
 # Create your models here.
 
 
+class Facility(models.Model):
+    code = models.CharField(max_length=4)
+    name = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.name
+
 class Rental(models.Model):
     PENDING = 'PD'
     ACCEPTED = 'AC'
@@ -12,6 +19,13 @@ class Rental(models.Model):
     FINISHED = 'FI'
     REJECTED = 'XX'
 
+    TEA_ROOM = 'TR'
+    BAR = 'BA'
+    BOAT = 'BO'
+    SPORTSHALL = 'GY'
+    GAMES = 'GA'
+    WS_TOOLS = 'WS'
+    
     STATE_CHOICES = [
         (PENDING, 'Pending'),
         (ACCEPTED, 'Accepted'),
@@ -21,32 +35,12 @@ class Rental(models.Model):
         (REJECTED, 'Rejected'),
     ]
 
-    TEA_ROOM = 'TR'
-    BAR = 'BA'
-    BOAT = 'BO'
-    SPORTSHALL = 'GY'
-    GAMES = 'GA'
-    WS_TOOLS = 'WS'
-
-    RENTAL_CHOICES = [
-        (TEA_ROOM, 'Tea Room'),
-        (BAR, 'Bar'),
-        (BOAT, 'Boat'),
-        (SPORTSHALL, 'Sportshall'),
-        (GAMES, 'Games'),
-        (WS_TOOLS, 'Workshop Tools'),
-    ]
-
     objects = models.Manager()
     slug = models.SlugField()
     received_on = models.DateField(auto_now_add=True)
     begin = models.DateTimeField()
     end = models.DateTimeField()
-    facility = models.CharField(
-        max_length=2,
-        choices=RENTAL_CHOICES,
-        default=TEA_ROOM,
-    )
+    facility = models.ForeignKey(Facility, on_delete=models.DO_NOTHING)
 
     state = models.CharField(
         max_length=2,
