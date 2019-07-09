@@ -12,14 +12,18 @@ from . import models
 @login_required
 def index(request):
     req_pending = models.Rental.objects.filter(
-        state=models.Rental.PENDING).order_by('received_on')
+        state=models.Rental.PENDING).order_by('begin','received_on')
     req_upcoming = models.Rental.objects.filter(
         state=models.Rental.ACCEPTED).order_by('begin')
     req_running = models.Rental.objects.filter(
         state=models.Rental.IN_PROGRESS).order_by('begin')
     req_finished = models.Rental.objects.filter(
         state=models.Rental.FINISHED).order_by('begin')[:10]
-    return TemplateResponse(request, 'rentals/dashboard.html', {'req_upcoming_count': req_upcoming.count(), 'req_pending_count': req_pending.count(), 'req_running_count': req_running.count() , 'req_finished_count': req_finished.count(), 'req_pending': req_pending, 'req_upcoming': req_upcoming, 'req_running': req_running, 'req_finished': req_finished})
+    req_clarify = models.Rental.objects.filter(
+        state=models.Rental.CLARIFICATION).order_by('begin')
+    req_rejected = models.Rental.objects.filter(
+        state=models.Rental.REJECTED).order_by('begin')[:10]
+    return TemplateResponse(request, 'rentals/dashboard.html', {'req_upcoming_count': req_upcoming.count(), 'req_pending_count': req_pending.count(), 'req_running_count': req_running.count() , 'req_finished_count': req_finished.count(), 'req_rejected_count': req_rejected.count(), 'req_clarify_count': req_clarify.count(), 'req_pending': req_pending, 'req_upcoming': req_upcoming, 'req_running': req_running, 'req_finished': req_finished, 'req_rejected': req_rejected, 'req_clarify': req_clarify})
 
 @login_required
 def showDetails(request, requestSlug):

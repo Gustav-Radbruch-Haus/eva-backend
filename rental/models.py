@@ -7,10 +7,18 @@ import uuid
 class Facility(models.Model):
     code = models.CharField(max_length=4)
     name = models.CharField(max_length=255)
+    parent = models.ForeignKey('self',blank=True, null=True ,related_name='children', on_delete=models.CASCADE)
 
-    def __str__(self):
-        return self.name
+    def __str__(self):                           # __str__ method elaborated later in
+        full_path = [self.name]                  # post.  use __unicode__ in place of
+                                                 # __str__ if you are using python 2
+        k = self.parent
 
+        while k is not None:
+            full_path.append(k.name)
+            k = k.parent
+
+        return ' -> '.join(full_path[::-1])
 class Rental(models.Model):
     PENDING = 'PD'
     ACCEPTED = 'AC'
@@ -57,7 +65,7 @@ class Rental(models.Model):
     comment = models.TextField(blank=True)
 
     def __str__(self):
-        return '%s:%s %s >> %s: %s to %s' % (self.get_facility_display(), self.firstname, self.surname, self.begin.date(), self.begin.time(), self.end.time())
+        return '%s:%s %s >> %s: %s to %s' % (self.facility, self.firstname, self.surname, self.begin.date(), self.begin.time(), self.end.time())
 
     def _get_unique_slug(self):
         slug = uuid.uuid4()

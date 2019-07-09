@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load static%}
 {% load widget_tweaks %}
-
+{% block title %}Rental - Details - {{req.facility}}: {{req.firstname}} {{req.surname}}{% endblock %}
 {% block breadcrumb %}
 <div class="row wrapper border-bottom white-bg page-heading">
         <div class="col-lg-10">
@@ -11,7 +11,7 @@
                     <a href="/">Home</a>
                 </li>
                 <li class="breadcrumb-item">
-                    <a>Rentals</a>
+                    <a href="{% url 'rentalDashboard'%}">Rentals</a>
                 </li>
                 <li class="breadcrumb-item active">
                     <strong>Detail</strong>

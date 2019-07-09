@@ -49,7 +49,7 @@ class RentalrequestForm(ModelForm):
                 {'begin': ["The begin of the rental has to be before the end of it.", ]})
 
         # Special validations for Bar and Tea Room
-        if facility == models.Rental.BAR or facility == models.Rental.TEA_ROOM:
+        if facility.code == models.Rental.BAR or facility.code == models.Rental.TEA_ROOM:
             if begin.date() in deHolidays or end.date() in deHolidays:
                 raise ValidationError(
                     "The cannot be a rental during hoolidays!")
