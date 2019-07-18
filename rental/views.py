@@ -3,7 +3,8 @@ from django.template.response import TemplateResponse
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
-#import request as req
+import requests as req
+import json
 from . import forms
 from . import models
 
@@ -115,11 +116,15 @@ def makeRequest(request):
             # process the data in form.cleaned_data as required
             instance = form.save()
 
-            #data = {
-            #'username': 'root',
-            #'password': 'SVgrh123456!'
-            #}
-            #response = req.post('http://localhost:3000/users/login', data=data)
+            data = {'username': 'root','password': 'SVgrh123456!'}
+            response = req.post('http://localhost:3001/users/login', data=data)
+            json_data = json.loads(response.text)
+            cardTitle = str(instance.facility)+" >> "+str(instance.begin)
+            cardBody = """Name: {} {}\nApartement: {}\nDate: {} to {}\nNo. of Participants: {}\nContactnumber: {}\n""".format(instance.firstname, instance.surname, instance.appartement, instance.begin, instance.end, instance.estinated_number_of_people, instance.phone)
+
+            newCardData = { "title": cardTitle, "description": cardBody, "authorId": json_data["id"], "swimlaneId": "bHSEHr8K5gJTPHzrS" }
+            newCardRequest = req.post('http://localhost:3001/api/boards/LZFFTtWzFAxnfvy8J/lists/June8qZC8D92YuWDN/cards', headers={'Authorization': 'Bearer '+json_data["token"]}, data=newCardData)
+            #if(newCardRequest == 200)
 
             # redirect to a new URL:
             return TemplateResponse(request, 'request/receivedrequest.html', {'req': instance})
