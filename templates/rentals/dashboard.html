@@ -36,7 +36,7 @@
                             <strong>{{ req.facility }} : {{ req.firstname }} {{ req.surname }}</strong>
                             <div>{{req.reason}}
                             </div>
-                            <small class="text-muted">{{ req.begin|date:'d.m.Y H:i' }} to {{ req.begin|date:'d.m.Y H:i' }}</small>
+                            <small class="text-muted">{{ req.begin|date:'d.m.Y H:i' }} to {{ req.end|date:'d.m.Y H:i' }}</small>
                         </div>
                     </div>
 {% endfor %}
@@ -59,7 +59,7 @@
                             <strong>{{ req.facility }} : {{ req.firstname }} {{ req.surname }}</strong>
                             <div>{{req.reason}}
                             </div>
-                            <small class="text-muted">{{ req.begin|date:'d.m.Y H:i' }} to {{ req.begin|date:'d.m.Y H:i' }}</small>
+                            <small class="text-muted">{{ req.begin|date:'d.m.Y H:i' }} to {{ req.end|date:'d.m.Y H:i' }}</small>
                             <hr>
                             <div>Accepted by {{req.responsibleMember.get_full_name}}</div>
                         </div>
@@ -83,7 +83,7 @@
                             <strong>{{ req.facility }} : {{ req.firstname }} {{ req.surname }}</strong>
                             <div>{{req.reason}}
                             </div>
-                            <small class="text-muted">{{ req.begin|date:'d.m.Y H:i' }} to {{ req.begin|date:'d.m.Y H:i' }}</small>
+                            <small class="text-muted">{{ req.begin|date:'d.m.Y H:i' }} to {{ req.end|date:'d.m.Y H:i' }}</small>
                         </div>
                     </div>
 {% endfor %}
