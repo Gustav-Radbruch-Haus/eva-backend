@@ -5,7 +5,7 @@ from . import views
 
 urlpatterns = [
     #url(r'^$', views.index, name='redirect-to-login'),
-    path('', views.index, name='rentalDashboardIndex'),
+    path('', views.makeRequest, name='makeRequest'),
     path('dashboard/', views.index, name='rentalDashboard'),
     path('request/', views.makeRequest, name='makeRequest'),
     path('request/<slug:requestSlug>/', views.showDetails, name='requestDetail'),

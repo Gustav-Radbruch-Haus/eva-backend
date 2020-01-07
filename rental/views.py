@@ -6,30 +6,26 @@ from django.contrib.auth.decorators import login_required
 import requests as req
 import json
 from . import forms
-from . import models
+from .models import Rental, Facility, RentalComment
+from rental.mailer import notify_rm_new_request, notify_tn_request_approved, notiy_tn_request_rejected
 
 # Create your views here.
 
 @login_required
 def index(request):
-    req_pending = models.Rental.objects.filter(
-        state=models.Rental.PENDING).order_by('begin','received_on')
-    req_upcoming = models.Rental.objects.filter(
-        state=models.Rental.ACCEPTED).order_by('begin')
-    req_running = models.Rental.objects.filter(
-        state=models.Rental.IN_PROGRESS).order_by('begin')
-    req_finished = models.Rental.objects.filter(
-        state=models.Rental.FINISHED).order_by('begin')[:10]
-    req_clarify = models.Rental.objects.filter(
-        state=models.Rental.CLARIFICATION).order_by('begin')
-    req_rejected = models.Rental.objects.filter(
-        state=models.Rental.REJECTED).order_by('begin')[:10]
-    return TemplateResponse(request, 'rentals/dashboard.html', {'req_upcoming_count': req_upcoming.count(), 'req_pending_count': req_pending.count(), 'req_running_count': req_running.count() , 'req_finished_count': req_finished.count(), 'req_rejected_count': req_rejected.count(), 'req_clarify_count': req_clarify.count(), 'req_pending': req_pending, 'req_upcoming': req_upcoming, 'req_running': req_running, 'req_finished': req_finished, 'req_rejected': req_rejected, 'req_clarify': req_clarify})
+    req_pending = Rental.objects.pending()
+    req_accepted = Rental.objects.accepted()
+    req_running = Rental.objects.in_progress()
+    req_finished = Rental.objects.finished()
+    req_clarify = Rental.objects.in_clarification()
+    req_rejected = Rental.objects.rejected()
+
+    return TemplateResponse(request, 'rentals/dashboard.html', {'req_accepted_count': req_accepted.count(), 'req_pending_count': req_pending.count(), 'req_running_count': req_running.count() , 'req_finished_count': req_finished.count(), 'req_rejected_count': req_rejected.count(), 'req_clarify_count': req_clarify.count(), 'req_pending': req_pending, 'req_accepted': req_accepted, 'req_running': req_running, 'req_finished': req_finished, 'req_rejected': req_rejected, 'req_clarify': req_clarify})
 
 @login_required
 def showDetails(request, requestSlug):
-    instance = get_object_or_404(models.Rental, slug=requestSlug)
-    instance_comments = models.RentalComment.objects.filter(rental=instance.id).order_by('-created_at')
+    instance = get_object_or_404(Rental, slug=requestSlug)
+    instance_comments = RentalComment.objects.filter(rental=instance.id).order_by('-created_at')
     if request.method == 'POST':
         # create a form instance and populate it with data from the request:
         form = forms.RentalCommentForm(request.POST)
@@ -49,7 +45,7 @@ def showDetails(request, requestSlug):
 
 @login_required
 def commentOnRequest(request, requestSlug):
-    rental = get_object_or_404(models.Rental, slug=requestSlug)
+    rental = get_object_or_404(Rental, slug=requestSlug)
     if request.method == 'POST':
         # create a form instance and populate it with data from the request:
         form = forms.RentalCommentForm(request.POST)
@@ -67,32 +63,37 @@ def commentOnRequest(request, requestSlug):
 
 @login_required
 def acceptRequest(request, requestSlug):
-        instance = get_object_or_404(models.Rental, slug=requestSlug)
-        instance.state = models.Rental.ACCEPTED
+        instance = get_object_or_404(Rental, slug=requestSlug)
+        instance.responsibleMember = request.user
+        instance.state = Rental.ACCEPTED
         # TODO Ignore instance that are not pending
         instance.save()
+        notify_tn_request_approved(instance)
         return HttpResponseRedirect(reverse('rentalDashboard'))
 
 @login_required
 def rejectRequest(request, requestSlug):
-        instance = get_object_or_404(models.Rental, slug=requestSlug)
-        instance.state = models.Rental.REJECTED
+        instance = get_object_or_404(Rental, slug=requestSlug)
+        instance.state = Rental.REJECTED
         # TODO Ignore instance that are not pending
         instance.save()
+        notiy_tn_request_rejected(instance)
         return HttpResponseRedirect(reverse('rentalDashboard'))
 
 @login_required
 def startRequest(request, requestSlug):
-        instance = get_object_or_404(models.Rental, slug=requestSlug)
-        instance.state = models.Rental.IN_PROGRESS
+        instance = get_object_or_404(Rental, slug=requestSlug)
+        instance.state = Rental.IN_PROGRESS
+        instance.responsibleMember = request.user
         # TODO Ignore instance that are not pending
         instance.save()
         return HttpResponseRedirect(reverse('rentalDashboard'))
 
 @login_required
 def finishRequest(request, requestSlug):
-        instance = get_object_or_404(models.Rental, slug=requestSlug)
-        instance.state = models.Rental.FINISHED
+        instance = get_object_or_404(Rental, slug=requestSlug)
+        instance.state = Rental.FINISHED
+        instance.responsibleMember = request.user
         # TODO Ignore instance that are not pending
         instance.save()
         return HttpResponseRedirect(reverse('rentalDashboard'))
@@ -100,8 +101,9 @@ def finishRequest(request, requestSlug):
 
 @login_required
 def clarifyRequest(request, requestSlug):
-        instance = get_object_or_404(models.Rental, slug=requestSlug)
-        instance.state = models.Rental.CLARIFICATION
+        instance = get_object_or_404(Rental, slug=requestSlug)
+        instance.state = Rental.CLARIFICATION
+        instance.responsibleMember = request.user
         # TODO Ignore instance that are not pending
         instance.save()
         return HttpResponseRedirect(reverse('rentalDashboard'))
@@ -116,17 +118,7 @@ def makeRequest(request):
             # process the data in form.cleaned_data as required
             instance = form.save()
 
-            data = {'username': 'root','password': 'SVgrh123456!'}
-            response = req.post('http://localhost:3001/users/login', data=data)
-            json_data = json.loads(response.text)
-            cardTitle = str(instance.facility)+" >> "+str(instance.begin)
-            cardBody = """Name: {} {}\nApartement: {}\nDate: {} to {}\nNo. of Participants: {}\nContactnumber: {}\n""".format(instance.firstname, instance.surname, instance.appartement, instance.begin, instance.end, instance.estinated_number_of_people, instance.phone)
-
-            newCardData = { "title": cardTitle, "description": cardBody, "authorId": json_data["id"], "swimlaneId": "bHSEHr8K5gJTPHzrS" }
-            newCardRequest = req.post('http://localhost:3001/api/boards/LZFFTtWzFAxnfvy8J/lists/June8qZC8D92YuWDN/cards', headers={'Authorization': 'Bearer '+json_data["token"]}, data=newCardData)
-            #if(newCardRequest == 200)
-
-            # redirect to a new URL:
+            notify_rm_new_request(instance)
             return TemplateResponse(request, 'request/receivedrequest.html', {'req': instance})
 
     # if a GET (or any other method) we'll create a blank form
@@ -134,7 +126,3 @@ def makeRequest(request):
         form = forms.RentalrequestForm()
 
     return render(request, 'request/makerequest.html', {'form': form})
-
-    #curl http://localhost:3000/users/login -d "username=root&password=SVgrh123456!"
-
-    #curl -H "Authorization: Bearer veMnGcGDrUAG0d3Sl9j92_X5-V0exCvtq3j6sioH8dQ" -H "Content-type:application/json" -X POST http://localhost:3000/api/boards/LZFFTtWzFAxnfvy8J/cards  -d '{ "title": "Card title text", "description": "Card description text", "authorId": "The appropriate existing userId", "swimlaneId": "The destination swimlaneId" }'

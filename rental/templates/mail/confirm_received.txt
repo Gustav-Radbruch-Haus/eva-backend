@@ -1,0 +1,8 @@
+Hi {{name}},
+your request to rent {{facility}} on {{datefrom}} to {{dateto}}.
+We want you to inform that your request is confirmed!
+
+For more questions, pleased contact {{rental_member}}.
+
+Sincerely,
+Your SHC

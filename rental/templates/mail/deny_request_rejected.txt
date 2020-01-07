@@ -1,0 +1,8 @@
+Hi {{name}},
+sadly we cannot approve your request to rent {{facility}} on {{datefrom}} to {{dateto}}.
+This can have different causes, for more information please contact the SHC.
+
+For more questions, pleased contact us directly.
+
+Sincerely,
+Your SHC
