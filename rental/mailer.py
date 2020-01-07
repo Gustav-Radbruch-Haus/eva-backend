@@ -11,7 +11,7 @@ def notify_rm_new_request(rental: Rental):
 
     d = { 'name': rental.firstname + " " + rental.surname, 'facility': rental.facility, 'datefrom': rental.begin,'dateto': rental.end}
 
-    subject, from_email, to = 'A new request is made', 'noreply@grh-hamburg.de', 'pascal-sourya.havemann@outlook.com'
+    subject, from_email, to = 'A new request is made', 'noreply@grh-hamburg.de', 'rentalmanagers@grh-hamburg.de'
     text_content = plaintext.render(d)
     #html_content = htmly.render(d)
     msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
