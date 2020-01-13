@@ -1,6 +1,8 @@
 from django.db import models
 from django.conf import settings
 
+from django.utils.safestring import mark_safe
+
 import uuid
 # Create your models here.
 
@@ -125,9 +127,23 @@ class Rental(models.Model):
     reason = models.CharField(max_length=255)
     comment = models.TextField(blank=True)
 
-
     def __str__(self):
         return '%s:%s %s >> %s: %s to %s' % (self.facility, self.firstname, self.surname, self.begin.date(), self.begin.time(), self.end.time())
+
+    def get_state_tag(self):
+        if self.state == self.PENDING:
+            return mark_safe("""<span class="label label-warning">Pending</span>""")
+        elif self.state == self.ACCEPTED:
+            return mark_safe("""<span class="label label-success">Accepted</span>""")
+        elif self.state == self.IN_PROGRESS:
+            return mark_safe("""<span class="label label-primary">Running</span>""")
+        elif self.state == self.REJECTED:
+            return mark_safe("""<span class="label label-danger">Rejected</span>""")
+        elif self.state == self.FINISHED:
+            return mark_safe("""<span class="label label-plain">Finished</span>""")
+        elif self.state == self.CLARIFICATION:
+            return mark_safe("""<span class="label label-information">Clarification</span>""")
+
 
     def _get_unique_slug(self):
         slug = uuid.uuid4()
@@ -152,7 +168,7 @@ class RentalComment(models.Model):
 class RentalActivity(models.Model):
     rental = models.ForeignKey(Rental, on_delete=models.CASCADE)
     status = models.CharField(max_length=12)
-    creator = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.DO_NOTHING)
+    creator = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.DO_NOTHING, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     comment = models.TextField()
 

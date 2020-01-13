@@ -1,7 +1,7 @@
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import get_template
 from django.template import Context
-from rental.models import Rental
+from rental.models import Rental, RentalActivity
 
 def notify_rm_new_request(rental: Rental):
     receiver = rental.email
@@ -9,7 +9,7 @@ def notify_rm_new_request(rental: Rental):
     plaintext = get_template('mail/notify_new_request.txt')
     #htmly     = get_template('email.html')
 
-    d = { 'name': rental.firstname + " " + rental.surname, 'facility': rental.facility, 'datefrom': rental.begin,'dateto': rental.end}
+    d = { 'name': rental.firstname + " " + rental.surname, 'facility': rental.facility, 'datefrom': rental.begin,'dateto': rental.end, 'reason': rental.reason}
 
     subject, from_email, to = 'A new request is made', 'noreply@grh-hamburg.de', 'rentalmanagers@grh-hamburg.de'
     text_content = plaintext.render(d)
@@ -32,6 +32,8 @@ def notify_tn_request_approved(rental: Rental):
     msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
     #msg.attach_alternative(html_content, "text/html")
     msg.send()
+    log = RentalActivity(rental=rental, status="success", comment="Mail sent: Request Accepted.")
+    log.save()
 
 def notiy_tn_request_rejected(rental: Rental):
     receiver = rental.email
@@ -47,3 +49,5 @@ def notiy_tn_request_rejected(rental: Rental):
     msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
     #msg.attach_alternative(html_content, "text/html")
     msg.send()
+    log = RentalActivity(rental=rental, status="error", comment="Mail sent: Request Rejected.")
+    log.save()

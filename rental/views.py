@@ -6,7 +6,7 @@ from django.contrib.auth.decorators import login_required
 import requests as req
 import json
 from . import forms
-from .models import Rental, Facility, RentalComment
+from .models import Rental, Facility, RentalComment, RentalActivity
 from rental.mailer import notify_rm_new_request, notify_tn_request_approved, notiy_tn_request_rejected
 
 # Create your views here.
@@ -26,6 +26,7 @@ def index(request):
 def showDetails(request, requestSlug):
     instance = get_object_or_404(Rental, slug=requestSlug)
     instance_comments = RentalComment.objects.filter(rental=instance.id).order_by('-created_at')
+    instance_activities = RentalActivity.objects.filter(rental=instance.id).order_by('-created_at')
     if request.method == 'POST':
         # create a form instance and populate it with data from the request:
         form = forms.RentalCommentForm(request.POST)
@@ -36,12 +37,12 @@ def showDetails(request, requestSlug):
             sF.creator = request.user
             sF.rental = instance
             sF.save()
-            return TemplateResponse(request, 'rentals/details.html', {'reqID':requestSlug, 'req':instance, 'comments':instance_comments, 'form': forms.RentalCommentForm()})
+            return TemplateResponse(request, 'rentals/details.html', {'reqID':requestSlug, 'req':instance, 'comments':instance_comments, 'activities':instance_activities, 'form': forms.RentalCommentForm()})
     # if a GET (or any other method) we'll create a blank form
     else:
         form = forms.RentalCommentForm()
 
-    return TemplateResponse(request, 'rentals/details.html', {'reqID':requestSlug, 'req':instance, 'comments':instance_comments, 'form': form})
+    return TemplateResponse(request, 'rentals/details.html', {'reqID':requestSlug, 'req':instance, 'comments':instance_comments, 'activities':instance_activities, 'form': form})
 
 @login_required
 def commentOnRequest(request, requestSlug):
@@ -68,6 +69,8 @@ def acceptRequest(request, requestSlug):
         instance.state = Rental.ACCEPTED
         # TODO Ignore instance that are not pending
         instance.save()
+        log = RentalActivity(rental=instance, creator=request.user, status="success", comment="The request was accepted.")
+        log.save()
         notify_tn_request_approved(instance)
         return HttpResponseRedirect(reverse('rentalDashboard'))
 
@@ -77,6 +80,8 @@ def rejectRequest(request, requestSlug):
         instance.state = Rental.REJECTED
         # TODO Ignore instance that are not pending
         instance.save()
+        log = RentalActivity(rental=instance, creator=request.user, status="error", comment="The request was rejected.")
+        log.save()
         notiy_tn_request_rejected(instance)
         return HttpResponseRedirect(reverse('rentalDashboard'))
 
@@ -87,6 +92,8 @@ def startRequest(request, requestSlug):
         instance.responsibleMember = request.user
         # TODO Ignore instance that are not pending
         instance.save()
+        log = RentalActivity(rental=instance, creator=request.user, status="success", comment="The rental was started.")
+        log.save()
         return HttpResponseRedirect(reverse('rentalDashboard'))
 
 @login_required
@@ -96,6 +103,8 @@ def finishRequest(request, requestSlug):
         instance.responsibleMember = request.user
         # TODO Ignore instance that are not pending
         instance.save()
+        log = RentalActivity(rental=instance, creator=request.user, status="success", comment="The rental was finished.")
+        log.save()
         return HttpResponseRedirect(reverse('rentalDashboard'))
 
 
@@ -106,6 +115,8 @@ def clarifyRequest(request, requestSlug):
         instance.responsibleMember = request.user
         # TODO Ignore instance that are not pending
         instance.save()
+        log = RentalActivity(rental=instance, creator=request.user, status="warning", comment="The rental needs to be clarified.")
+        log.save()
         return HttpResponseRedirect(reverse('rentalDashboard'))
 
 def makeRequest(request):
@@ -117,6 +128,8 @@ def makeRequest(request):
         if form.is_valid():
             # process the data in form.cleaned_data as required
             instance = form.save()
+            log = RentalActivity(rental=instance, status="success", comment="The request was created.")
+            log.save()
 
             notify_rm_new_request(instance)
             return TemplateResponse(request, 'request/receivedrequest.html', {'req': instance})

@@ -38,7 +38,7 @@
                         <div class="col-lg-6">
                             <dl class="row mb-0">
                                 <div class="col-sm-4 text-sm-right"><dt>Status:</dt> </div>
-                                <div class="col-sm-8 text-sm-left"><dd class="mb-1"><span class="label label-warning">{{req.get_state_display}}</span></dd></div>
+                                <div class="col-sm-8 text-sm-left"><dd class="mb-1">{{req.get_state_tag}}</dd></div>
                             </dl>
                             <dl class="row mb-0">
                                 <div class="col-sm-4 text-sm-right"><dt>Responsible Member:</dt> </div>
@@ -50,7 +50,7 @@
                             </dl>
                             <dl class="row mb-0">
                                 <div class="col-sm-4 text-sm-right"><dt>Date:</dt> </div>
-                                <div class="col-sm-8 text-sm-left"> <dd class="mb-1">{{ req.begin|date:'d.m.Y H:i' }} to {{ req.begin|date:'d.m.Y H:i' }}</dd></div>
+                                <div class="col-sm-8 text-sm-left"> <dd class="mb-1">{{ req.begin|date:'d.m.Y H:i' }} to {{ req.end|date:'d.m.Y H:i' }}</dd></div>
                             </dl>
                         </div>
                         <div class="col-lg-6" id="cluster_info">
@@ -60,7 +60,7 @@
                                     <dt>Mail:</dt>
                                 </div>
                                 <div class="col-sm-8 text-sm-left">
-                                    <dd class="mb-1">{{req.email}}</dd>
+                                    <dd class="mb-1"><a href="mailto:{{req.email}}">{{req.email}}</a></dd>
                                 </div>
                             </dl>
                             <dl class="row mb-0">
@@ -68,7 +68,7 @@
                                     <dt>Phone:</dt>
                                 </div>
                                 <div class="col-sm-8 text-sm-left">
-                                    <dd class="mb-1"> {{req.phone}}</dd>
+                                    <dd class="mb-1"><a href="tel:{{req.phone}}">{{req.phone}}</a></dd>
                                 </div>
                             </dl>
                             <dl class="row mb-0">
@@ -114,6 +114,7 @@
                         <div class="tab-content">
                         <div class="tab-pane active" id="tab-1">
                             <div class="feed-activity-list">
+                            {% if comments %}
                                 {% for comment in comments %}
                                 <div class="feed-element">
                                         <a href="#" class="float-left">
@@ -129,6 +130,18 @@
                                     </div>
                                 </div>
                                 {% endfor %}
+                            {% else %}
+                                <div class="feed-element">
+                                        <a href="#" class="float-left">
+                                                <img alt="image" class="rounded-circle" src="https://ui-avatars.com/api/?name=System Message">
+                                        </a>
+                                    <div class="media-body ">
+                                        <small class="float-right"></small>
+                                        <strong>No Comment yet.</strong><br>
+                                        <small class="text-muted"></small>
+                                    </div>
+                                </div>
+                            {% endif %}
                             </div>
 
                         </div>
@@ -138,194 +151,32 @@
                                 <thead>
                                 <tr>
                                     <th>Status</th>
-                                    <th>Title</th>
-                                    <th>Start Time</th>
-                                    <th>End Time</th>
+                                    <th>Time</th>
+                                    <th>Member</th>
                                     <th>Comments</th>
                                 </tr>
                                 </thead>
                                 <tbody>
+                                {% if activities %}
+                                {% for activity in activities %}
                                 <tr>
                                     <td>
-                                        <span class="label label-primary"><i class="fa fa-check"></i> Completed</span>
+                                        <span class="label label-{{activity.status}}"><i class="fa fa-check"></i></span>
                                     </td>
                                     <td>
-                                       Create project in webapp
+                                       {{activity.created_at}}
                                     </td>
                                     <td>
-                                       12.07.2014 10:10:1
+                                    {% if activity.creator %}{{activity.creator.get_full_name}}{% else %}SYSTEM{% endif %}
                                     </td>
                                     <td>
-                                        14.07.2014 10:16:36
+                                        {{activity.comment}}
                                     </td>
-                                    <td>
-                                    <p class="small">
-                                        Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable.
-                                    </p>
-                                    </td>
-
                                 </tr>
-                                <tr>
-                                    <td>
-                                        <span class="label label-primary"><i class="fa fa-check"></i> Accepted</span>
-                                    </td>
-                                    <td>
-                                        Various versions
-                                    </td>
-                                    <td>
-                                        12.07.2014 10:10:1
-                                    </td>
-                                    <td>
-                                        14.07.2014 10:16:36
-                                    </td>
-                                    <td>
-                                        <p class="small">
-                                            Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).
-                                        </p>
-                                    </td>
-
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <span class="label label-primary"><i class="fa fa-check"></i> Sent</span>
-                                    </td>
-                                    <td>
-                                        There are many variations
-                                    </td>
-                                    <td>
-                                        12.07.2014 10:10:1
-                                    </td>
-                                    <td>
-                                        14.07.2014 10:16:36
-                                    </td>
-                                    <td>
-                                        <p class="small">
-                                            There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which
-                                        </p>
-                                    </td>
-
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <span class="label label-primary"><i class="fa fa-check"></i> Reported</span>
-                                    </td>
-                                    <td>
-                                        Latin words
-                                    </td>
-                                    <td>
-                                        12.07.2014 10:10:1
-                                    </td>
-                                    <td>
-                                        14.07.2014 10:16:36
-                                    </td>
-                                    <td>
-                                        <p class="small">
-                                            Latin words, combined with a handful of model sentence structures
-                                        </p>
-                                    </td>
-
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <span class="label label-primary"><i class="fa fa-check"></i> Accepted</span>
-                                    </td>
-                                    <td>
-                                        The generated Lorem
-                                    </td>
-                                    <td>
-                                        12.07.2014 10:10:1
-                                    </td>
-                                    <td>
-                                        14.07.2014 10:16:36
-                                    </td>
-                                    <td>
-                                        <p class="small">
-                                            The generated Lorem Ipsum is therefore always free from repetition, injected humour, or non-characteristic words etc.
-                                        </p>
-                                    </td>
-
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <span class="label label-primary"><i class="fa fa-check"></i> Sent</span>
-                                    </td>
-                                    <td>
-                                        The first line
-                                    </td>
-                                    <td>
-                                        12.07.2014 10:10:1
-                                    </td>
-                                    <td>
-                                        14.07.2014 10:16:36
-                                    </td>
-                                    <td>
-                                        <p class="small">
-                                            The first line of Lorem Ipsum, "Lorem ipsum dolor sit amet..", comes from a line in section 1.10.32.
-                                        </p>
-                                    </td>
-
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <span class="label label-primary"><i class="fa fa-check"></i> Reported</span>
-                                    </td>
-                                    <td>
-                                        The standard chunk
-                                    </td>
-                                    <td>
-                                        12.07.2014 10:10:1
-                                    </td>
-                                    <td>
-                                        14.07.2014 10:16:36
-                                    </td>
-                                    <td>
-                                        <p class="small">
-                                            The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for those interested.
-                                        </p>
-                                    </td>
-
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <span class="label label-primary"><i class="fa fa-check"></i> Completed</span>
-                                    </td>
-                                    <td>
-                                        Lorem Ipsum is that
-                                    </td>
-                                    <td>
-                                        12.07.2014 10:10:1
-                                    </td>
-                                    <td>
-                                        14.07.2014 10:16:36
-                                    </td>
-                                    <td>
-                                        <p class="small">
-                                            Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable.
-                                        </p>
-                                    </td>
-
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <span class="label label-primary"><i class="fa fa-check"></i> Sent</span>
-                                    </td>
-                                    <td>
-                                        Contrary to popular
-                                    </td>
-                                    <td>
-                                        12.07.2014 10:10:1
-                                    </td>
-                                    <td>
-                                        14.07.2014 10:16:36
-                                    </td>
-                                    <td>
-                                        <p class="small">
-                                            Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical
-                                        </p>
-                                    </td>
-
-                                </tr>
-
+                                {% endfor %}
+                                {% else %}
+                                <tr> <td>NO ACTIVITY</td> </tr>
+                                {% endif %}
                                 </tbody>
                             </table>
 
@@ -342,9 +193,9 @@
         </div>
     <div class="col-lg-3">
         <div class="wrapper wrapper-content project-manager">
-            <h4>Project options</h4>
+            <h4>Rental options</h4>
             <p class="small">
-                Lorem ipsum. Hier kann noch was stehen
+                Please choose from the following options
             </p>
             <h5>Actions</h5>
             <div class="text-center m-t-md">
