@@ -11,8 +11,8 @@ class RentalCommentForm(ModelForm):
 class RentalrequestForm(ModelForm):
     class Meta:
         model = models.Rental
-        fields = ['begin', 'end', 'facility', 'firstname', 'surname', 'appartement',
-                  'email', 'phone', 'estinated_number_of_people', 'reason', 'comment']
+        fields = ['begin', 'end', 'facility', 'firstname', 'surname', 'apartement',
+                  'email', 'phone', 'estimated_number_of_people', 'reason', 'comment']
 
     def __init__(self, *args, **kwargs):
         super(RentalrequestForm, self).__init__(*args, **kwargs)
