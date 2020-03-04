@@ -15,4 +15,5 @@ To make it easier for tenants to make a request for renting stuff from the SHC, 
 * Inventorymanagement
   * SHC
   * Bar
+  * Tutors
 * Eventmanagement
