@@ -16,4 +16,5 @@ To make it easier for tenants to make a request for renting stuff from the SHC, 
   * SHC
   * Bar
   * Tutors
+  * Stuff
 * Eventmanagement
