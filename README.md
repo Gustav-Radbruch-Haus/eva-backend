@@ -1,4 +1,4 @@
-# EVA - Elektronische Verwaltungs Assistent
+# EVA - Elektronische Verwaltungs Assistent | Dockerized
 ## Intro
 This app is designed to aggregate tools to interact with tenants.
 
