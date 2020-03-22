@@ -24,6 +24,15 @@ DEBUG = int(os.environ.get("DEBUG", default=0))
 # For example: 'DJANGO_ALLOWED_HOSTS=localhost 127.0.0.1 [::1]'
 ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS").split(" ")
 
+
+##
+# Rental specific env-vars
+#
+RENTAL_MANAGER_MAILER = os.environ.get("RENTAL_MANAGER_MAILER", "")
+
+
+
+
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 

@@ -2,6 +2,7 @@ from django.core.mail import EmailMultiAlternatives
 from django.template.loader import get_template
 from django.template import Context
 from rental.models import Rental, RentalActivity
+from django.conf import settings
 
 def notify_rm_new_request(rental: Rental):
     receiver = rental.email
@@ -11,7 +12,7 @@ def notify_rm_new_request(rental: Rental):
 
     d = { 'name': rental.firstname + " " + rental.surname, 'facility': rental.facility, 'datefrom': rental.begin,'dateto': rental.end, 'reason': rental.reason}
 
-    subject, from_email, to = 'A new request is made', 'noreply@grh-hamburg.de', 'rentalmanagers@grh-hamburg.de'
+    subject, from_email, to = 'A new request is made', 'noreply@grh-hamburg.de', settings.RENTAL_MANAGER_MAILER
     text_content = plaintext.render(d)
     #html_content = htmly.render(d)
     msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
