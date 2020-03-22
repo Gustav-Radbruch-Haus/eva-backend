@@ -11,6 +11,7 @@ then
     echo "PostgreSQL started"
 fi
 
+#Don't flush always!
 #python managdocker-e.py flush --no-input
 python manage.py migrate
 
