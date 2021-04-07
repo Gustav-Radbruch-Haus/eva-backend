@@ -1,4 +1,4 @@
-package de.grh_hamburg.eva.server.config;
+package de.grh_hamburg.eva.server.security.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
