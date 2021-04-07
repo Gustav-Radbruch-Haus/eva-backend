@@ -1,6 +1,10 @@
 package de.grh_hamburg.eva.server.user.service;
 
+import de.grh_hamburg.eva.server.user.exception.IdParseException;
+import de.grh_hamburg.eva.server.user.exception.UserNotFoundException;
 import de.grh_hamburg.eva.server.user.model.User;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -8,6 +12,8 @@ import java.util.List;
 
 @Component
 public class EvaUserService {
+    private Logger LOGGER = LoggerFactory.getLogger(EvaUserService.class);
+
     @Autowired
     private UserRepository userRepository;
 
@@ -16,15 +22,21 @@ public class EvaUserService {
     }
 
     public User getUserById(String id) {
-        int intId;
+        User user;
 
         try {
-            intId = Integer.parseInt(id);
+            user = userRepository.getUserById(Integer.parseInt(id));
+
+            if (user == null) {
+                LOGGER.error("Could not find user with ID : " + id);
+                throw new UserNotFoundException();
+            }
         } catch (NumberFormatException e) {
-            return null;
+            LOGGER.error("Could not parse id-string to integer : " + id);
+            throw new IdParseException();
         }
 
-        return userRepository.getUserById(intId);
+        return user;
     }
 
     public User getUserByEMail(String email) {
