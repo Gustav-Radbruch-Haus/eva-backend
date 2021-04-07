@@ -9,8 +9,9 @@ import javax.persistence.*;
 @Table(name = "dormitories")
 public class Dormitory {
     @Id
+    @Column(name = "dormitory_id")
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    private Integer id;
 
     @Column(name = "name")
     private String dormName;

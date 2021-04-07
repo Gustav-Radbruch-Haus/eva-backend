@@ -11,13 +11,13 @@ public class Address {
     @Id
     @Column(name = "address_id")
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private int addressId;
+    private Integer addressId;
 
     @Column(name = "street")
     private String street;
 
     @Column(name = "street_number")
-    private String streetNumber;
+    private Integer streetNumber;
 
     @Column(name = "city")
     private String city;
