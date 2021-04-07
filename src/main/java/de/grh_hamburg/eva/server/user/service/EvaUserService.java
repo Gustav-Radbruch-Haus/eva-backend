@@ -12,7 +12,7 @@ import java.util.List;
 
 @Component
 public class EvaUserService {
-    private Logger LOGGER = LoggerFactory.getLogger(EvaUserService.class);
+    private final Logger LOGGER = LoggerFactory.getLogger(EvaUserService.class);
 
     @Autowired
     private UserRepository userRepository;
