@@ -13,10 +13,14 @@ insert into "users"
 insert into "roles"
 ("role_id", "name") values
 (0, 'ADMIN'),
-(1, 'SHC-MEMBER'),
-(2, 'RESIDENT'),
-(3, 'GUEST');
+(1, 'DORM-ADMIN'),
+(2, 'SHC-MEMBER'),
+(3, 'RESIDENT'),
+(4, 'GUEST');
 
 insert into "users_roles"
 ("user_id", "role_id") values
-(0, 0);
+(0, 0),
+(0, 1),
+(0, 2),
+(0, 3);
