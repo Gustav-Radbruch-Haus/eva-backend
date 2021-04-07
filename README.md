@@ -37,6 +37,3 @@
   1. Navigate to EVA-root/backend/
   2. Type **docker-compose up** to start PostgresSQL
   3. .. to shutdown type **docker-compose down**
-
-<br>
-Start the application again and navigate to: localhost:8080/hello-world .. you should see a welcome message!
