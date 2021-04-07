@@ -3,12 +3,14 @@ package de.grh_hamburg.eva.server.user.model;
 import de.grh_hamburg.eva.server.dorm.model.Dormitory;
 import de.grh_hamburg.eva.server.security.model.Role;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
 @Data
+@NoArgsConstructor
 @Entity
 @Table(name = "users")
 public class User {
@@ -49,7 +51,4 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )
     private Set<Role> roles = new HashSet<>();
-
-    public User() {
-    }
 }

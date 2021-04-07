@@ -1,10 +1,12 @@
 package de.grh_hamburg.eva.server.dorm.model;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
 @Data
+@NoArgsConstructor
 @Entity
 @Table(name = "dormitories")
 public class Dormitory {
@@ -19,9 +21,6 @@ public class Dormitory {
     @OneToOne
     @JoinColumn(name = "address_id")
     private Address address;
-
-    public Dormitory() {
-    }
 
     @Override
     public String toString() {

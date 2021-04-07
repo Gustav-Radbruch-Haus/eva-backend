@@ -1,10 +1,12 @@
 package de.grh_hamburg.eva.server.dorm.model;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
 @Data
+@NoArgsConstructor
 @Entity
 @Table(name = "addresses")
 public class Address {
@@ -30,7 +32,4 @@ public class Address {
 
     @Column(name = "comment")
     private String comment;
-
-    public Address() {
-    }
 }
