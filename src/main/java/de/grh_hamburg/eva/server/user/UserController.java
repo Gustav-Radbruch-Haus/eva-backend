@@ -10,6 +10,8 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/")
 public class UserController {
+    //FIXME ct, 08.04.2021 - (all) controller should return dto objects not db models.
+
     @Autowired
     private EvaUserService userService;
 
@@ -18,14 +20,14 @@ public class UserController {
         return userService.getAllUsers();
     }
 
+    @PostMapping(value = "/users", consumes = {"application/json"}, produces = {"application/json"})
+    public User createUser(@RequestBody String jsonUserObject) {
+        System.out.println(jsonUserObject);
+        return userService.createUser(jsonUserObject);
+    }
+
     @GetMapping(value = "/users/{id}", produces = {"application/json"})
     public User getUserById(@PathVariable String id) {
         return userService.getUserById(id);
-    }
-
-    @PostMapping(value = "/users/createUser")
-    public User createUser(@RequestBody String jsonUserObject) {
-        // TODO ct, validate jsonUserObject and create new user
-        return null;
     }
 }

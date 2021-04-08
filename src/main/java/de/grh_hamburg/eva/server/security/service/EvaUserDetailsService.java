@@ -11,7 +11,6 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class EvaUserDetailsService implements UserDetailsService {
-
     @Autowired
     private UserRepository userRepository;
 
