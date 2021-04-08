@@ -1,6 +1,6 @@
 insert into "addresses"
 ("address_id", "street", "street_number", "postal_code", "city", "country_iso", "comment") values
-(0, 'Borgfelder Str.', 16, '20537', 'Hamburg', 'DE', '');
+(0, 'Borgfelder Str.', '16', '20537', 'Hamburg', 'DE', '');
 
 insert into "dormitories"
 ("dormitory_id", "name", "address_id") values

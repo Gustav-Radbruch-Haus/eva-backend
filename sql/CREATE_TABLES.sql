@@ -2,7 +2,7 @@
 create table "addresses" (
    "address_id" int not null primary key,
    "street" varchar(256) not null,
-   "street_number" int not null,
+   "street_number" varchar(16) not null,
    "city" varchar(32) not null,
    "postal_code" varchar(32) not null,
    "country_iso" varchar(32) not null,
