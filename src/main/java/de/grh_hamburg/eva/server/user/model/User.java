@@ -2,6 +2,7 @@ package de.grh_hamburg.eva.server.user.model;
 
 import de.grh_hamburg.eva.server.dorm.model.Dormitory;
 import de.grh_hamburg.eva.server.security.model.Role;
+import de.grh_hamburg.eva.server.user.dto.UserDto;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -35,9 +36,6 @@ public class User {
     @Column(name = "password_hash")
     private String passHash;
 
-    @Column(name = "salt")
-    private String salt;
-
     @Column(name = "enabled")
     private Boolean enabled;
 
@@ -51,4 +49,11 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )
     private Set<Role> roles = new HashSet<>();
+
+    public User(UserDto dto, Dormitory dormitory) {
+        this.userName = dto.getUserName();
+        this.email = dto.getEmail();
+        this.dormitory = dormitory;
+        this.flat = dto.getFlat();
+    }
 }

@@ -23,7 +23,6 @@ create table "users" (
   "dormitory_id" int,
   "flat" varchar(64),
   "password_hash" varchar(128) not null,
-  "salt" varchar(128) not null,
   "enabled" boolean default null,
   "comment" text,
   constraint "dormitory_fk" foreign key ("dormitory_id") references "dormitories" ("dormitory_id")
