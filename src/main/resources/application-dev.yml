@@ -7,3 +7,8 @@ spring:
     url: "jdbc:postgresql://localhost:5432/postgres"
     username: McClane
     password: yippiejayeah_schweinebacke
+logging:
+  level:
+    org:
+      springframework:
+        security: DEBUG
