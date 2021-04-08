@@ -17,7 +17,7 @@ import java.util.Set;
 public class User {
     @Id
     @Column(name = "user_id")
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
     @Column(name = "email")
@@ -50,10 +50,9 @@ public class User {
     )
     private Set<Role> roles = new HashSet<>();
 
-    public User(UserDto dto, Dormitory dormitory) {
+    public User(UserDto dto) {
         this.userName = dto.getUserName();
         this.email = dto.getEmail();
-        this.dormitory = dormitory;
         this.flat = dto.getFlat();
     }
 }
