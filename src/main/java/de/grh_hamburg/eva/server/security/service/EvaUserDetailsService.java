@@ -1,10 +1,9 @@
 package de.grh_hamburg.eva.server.security.service;
 
-import de.grh_hamburg.eva.server.user.model.EvaUserDetails;
 import de.grh_hamburg.eva.server.user.model.User;
+import de.grh_hamburg.eva.server.user.model.UserDetails;
 import de.grh_hamburg.eva.server.user.service.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
@@ -18,13 +17,13 @@ public class EvaUserDetailsService implements UserDetailsService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public org.springframework.security.core.userdetails.UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository.getUserByUsername(username);
 
         if (user == null) {
             throw new UsernameNotFoundException("Could not find User!");
         }
 
-        return new EvaUserDetails(user);
+        return new UserDetails(user);
     }
 }

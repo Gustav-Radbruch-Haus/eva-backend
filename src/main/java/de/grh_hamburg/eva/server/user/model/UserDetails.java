@@ -3,18 +3,17 @@ package de.grh_hamburg.eva.server.user.model;
 import de.grh_hamburg.eva.server.security.model.Role;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
-public class EvaUserDetails implements UserDetails {
+public class UserDetails implements org.springframework.security.core.userdetails.UserDetails {
 
     private User user;
 
-    public EvaUserDetails(User user) {
+    public UserDetails(User user) {
         this.user = user;
     }
 
