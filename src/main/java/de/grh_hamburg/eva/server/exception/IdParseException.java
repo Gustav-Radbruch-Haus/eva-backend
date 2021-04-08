@@ -1,4 +1,4 @@
-package de.grh_hamburg.eva.server.user.exception;
+package de.grh_hamburg.eva.server.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;

@@ -1,7 +1,7 @@
 package de.grh_hamburg.eva.server.user.service;
 
-import de.grh_hamburg.eva.server.user.exception.IdParseException;
-import de.grh_hamburg.eva.server.user.exception.UserNotFoundException;
+import de.grh_hamburg.eva.server.exception.EntityNotFoundException;
+import de.grh_hamburg.eva.server.exception.IdParseException;
 import de.grh_hamburg.eva.server.user.model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,7 +29,7 @@ public class EvaUserService {
 
             if (user == null) {
                 LOGGER.error("Could not find user with ID : " + id);
-                throw new UserNotFoundException();
+                throw new EntityNotFoundException();
             }
         } catch (NumberFormatException e) {
             LOGGER.error("Could not parse id-string to integer : " + id);

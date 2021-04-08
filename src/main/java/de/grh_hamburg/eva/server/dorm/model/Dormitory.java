@@ -12,7 +12,7 @@ import javax.persistence.*;
 public class Dormitory {
     @Id
     @Column(name = "dormitory_id")
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Integer id;
 
     @Column(name = "name")
