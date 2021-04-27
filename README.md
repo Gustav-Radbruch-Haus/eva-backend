@@ -34,6 +34,6 @@
     4. Under 'VM options' past: **-Dspring.profiles.active=dev** this will enable the development profile of the Spring application
 
 * Start Postgres with docker-compose
-  1. Navigate to EVA-root/backend/
+  1. Navigate to EVA-root/backend/docker/dev/
   2. Type **docker-compose up** to start PostgresSQL
   3. .. to shutdown type **docker-compose down**

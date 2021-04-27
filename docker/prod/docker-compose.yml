@@ -1,0 +1,18 @@
+# docker-compose.yml for development database backend
+# EVA - Elektronische Verwaltungs App
+# GRH, Hamburg
+
+version: '3.8'
+
+services:
+
+  db:
+    image: postgres:13
+    restart: always
+    environment:
+      POSTGRES_USER: ${EVA_DB_USER}
+      POSTGRES_PASSWORD: ${EVA_DB_PASSWORD}
+      POSTGRES_DB: ${EVA_DB}
+    ports:
+      - 5432:5432
+

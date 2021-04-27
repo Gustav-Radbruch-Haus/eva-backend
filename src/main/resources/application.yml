@@ -1,1 +1,21 @@
-name: EVA-Server
+# dev profile
+spring:
+  config:
+    activate:
+      on-profile: dev
+  name: EVA-Server-DEV
+  environment: development
+  enabled: true
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+  datasource:
+    url: "jdbc:postgresql://localhost:5432/postgres"
+    username: McClane
+    password: yippiejayeah_schweinebacke
+  logging:
+    level:
+      org:
+        springframework:
+          security: DEBUG

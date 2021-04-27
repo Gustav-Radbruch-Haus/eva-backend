@@ -1,9 +1,16 @@
+# production profile
 spring:
+  config:
+    activate:
+      on-profile: prod
+  name: EVA-Server-PROD
+  environment: production
+  enabled: false
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: validate
     database-platform: org.hibernate.dialect.PostgreSQLDialect
-  datasource:
-    url: "jdbc:postgresql://123.456.789.1:5432/postgres"
-    username:
-    password:
+    datasource:
+      url: "jdbc:postgresql://localhost:5432/postgres"
+      username: ${EVA_DB_USER}
+      password: ${EVA_DB_PASSWORD}
